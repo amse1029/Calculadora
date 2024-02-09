@@ -1,0 +1,3 @@
+mx.edu.itson.potros.calculadora.test
+style WhiteBackgroundDialogTheme
+style WhiteBackgroundTheme
