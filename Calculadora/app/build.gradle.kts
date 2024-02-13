@@ -4,12 +4,12 @@ plugins {
 }
 
 android {
-    namespace = "mx.edu.itson.potros.calculadora"
+    namespace = "mx.edu.potros.calculadora"
     compileSdk = 34
 
     defaultConfig {
-        applicationId = "mx.edu.itson.potros.calculadora"
-        minSdk = 24
+        applicationId = "mx.edu.potros.calculadora"
+        minSdk = 21
         targetSdk = 34
         versionCode = 1
         versionName = "1.0"

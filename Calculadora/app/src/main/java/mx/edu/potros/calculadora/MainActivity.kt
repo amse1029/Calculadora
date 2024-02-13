@@ -2,16 +2,25 @@ package mx.edu.potros.calculadora
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.View
 import android.widget.Button
 import android.widget.TextView
 
 class MainActivity : AppCompatActivity() {
+
+    var numAnterior: Double = 0.0
+    var numNuevo: Double = 0.0
+    var operacionPendiente: String = ""
+
+    lateinit var numero: TextView
+    lateinit var total:TextView
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        val total = findViewById<TextView>(R.id.txTotal)
-        val numero = findViewById<TextView>(R.id.txNumero)
+        total = findViewById<TextView>(R.id.txTotal)
+        numero = findViewById<TextView>(R.id.txNumero)
 
         val uno = findViewById<Button>(R.id.uno)
         val dos = findViewById<Button>(R.id.dos)
@@ -30,7 +39,12 @@ class MainActivity : AppCompatActivity() {
         val result = findViewById<Button>(R.id.result)
         val borrar = findViewById<Button>(R.id.borrar)
 
-        var numActual = numero.text.toString()
+        val listener = View.OnClickListener { view ->
+            val numeroSeleccionado = (view as Button).text.toString()
+            numero.append(numeroSeleccionado)
+            total.append(numeroSeleccionado)
+
+        }
 
         uno.setOnClickListener {
             val texto = uno.text.toString()
@@ -82,15 +96,65 @@ class MainActivity : AppCompatActivity() {
             numero.text = texto
         }
 
-        var operacionActual = 0
-
         mas.setOnClickListener {
+            operacion("+")
+        }
 
-            total.setText(numActual.plus("+"))
-            numero.setText("0")
-            operacionActual = 1
-            numActual="0"
+        menos.setOnClickListener {
+            operacion("-")
+        }
 
+        por.setOnClickListener {
+            operacion("*")
+        }
+
+        division.setOnClickListener {
+            operacion("/")
+        }
+
+        result.setOnClickListener {
+            if (total.text.isNotEmpty()) {
+                numNuevo = total.text.toString().toDouble()
+                operacionFinal()
+            }
+        }
+
+        borrar.setOnClickListener {
+            numero.text =""
+            total.text = ""
+            numAnterior = 0.0
+            numNuevo = 0.0
+            operacionPendiente = ""
         }
     }
+
+    private fun operacion(op: String) {
+        if (total.text.isNotEmpty()) {
+
+            numAnterior = total.text.toString().toDouble()
+            operacionPendiente = op
+            total.text = ""
+            numero.append(op)
+        }
+    }
+
+    private fun operacionFinal() {
+        when (operacionPendiente) {
+            "+" -> total.text = (numAnterior + numNuevo).toString()
+            "-" -> total.text = (numAnterior - numNuevo).toString()
+            "*" -> total.text = (numAnterior * numNuevo).toString()
+            "/" -> {
+                if (numNuevo != 0.0) {
+                    total.text = (numAnterior / numNuevo).toString()
+                } else {
+                    total.text = "Error"
+                }
+            }
+        }
+        numAnterior = 0.0
+        numNuevo = 0.0
+        operacionPendiente = ""
+
+    }
+
 }
